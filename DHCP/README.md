@@ -47,9 +47,9 @@ Note: the IP configuration has 2 network interfaces (ens33 and ens37). ens33 is 
 Ensure that the indentation in .yaml is aligned to avoid misconfiguration or repititive error
 
 check and change the default route depending on the network that is more useful.
-
+``` jsx
 ip route #shows the routing table
-
+```
 ![Screenshot 2026-08-18 112400.png](Screenshot%202026-08-18%20112400.png)
 
 Install the DHCP server
@@ -97,15 +97,15 @@ systemctl status isc-dhcp-server
 ```
 
 Enable DHCP through the firewall
-
+``` jsx
 apt install ufw
 
 ufw enable
 
 ufw allow 67/udp
 
-ip route 
-
+ip route #to verify ip address changes
+```
 ![Screenshot 2026-08-18 141634.png](Screenshot%202026-08-18%20141634.png)
 
 On the virtual machine host, create a custom Virtual Machine network (Vmnet) for the network interface used for the internal network. 
