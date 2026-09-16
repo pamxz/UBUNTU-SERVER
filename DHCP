@@ -1,0 +1,103 @@
+
+DHCP
+DHCP is a network protocol used to automate the process of assigning IP address and other configuration details to devices in a network. Without DHCP, each device that is connecting to a network would be done manually by setting the IP address configuation which can be time-consuming and error-prone. DHCP also assigns with Domain Name System (DNS) addresses,subnet masks and default gateway, enabling devices to communicate with the internet and other devices within the network. The DHCP port number for the server is 67 and for the client is 68. It is a client-server protocol that uses UDP services. An IP address is assigned from a pool of addresses for each device connected to the network.
+How DHCP works ?
+DHCP protocol works in a 4 step process:
+DHCP Discover: This is the first message sent by a DHCP client to check whether any DHCP server is available on the network and to start getting an IP address. When a device (client) connects to the network, it doesn’t have an IP address.
+It sends a DHCP Discover message as a broadcast to find available DHCP servers.
+DHCP Offer:The DHCP server receives the discover message. DHCP server replies with an offer that includes an available IP address and configuration options (like subnet mask, gateway, DNS, and lease time).
+DHCP Request: DHCP Request is the message where the client confirms one chosen offer and asks the selected DHCP server to allocate that IP officially. It also tells other DHCP servers not to keep their offered IP reserved. The client chooses one of the offers (if multiple servers respond).
+DHCP Acknowledgement: DHCP ACK is the final confirmation sent by the selected DHCP server after it receives the client’s DHCP Request. This message officially assigns the IP address to the client and provides the full set of network configuration parameters.
+DHCP Component
+DHCP Server: A dedicated device, router or software device that manages the database of IP addresses, configuration and lease durations.
+DHCP Client: A network connected device that requests IP configuration from the Server.
+DHCP Relay Agent: A router/host configured to listen for and forward DHCP broadcast messages between clients and server across different subnets.
+Configuring Lab Environment
+The Lab Environment consists of one Server (Ubuntu Server) and two Client devices (one CentOS user and one RHEL user) getting IP configuration from the Server
+Configuring DHCP SERVER
+To configure DHCP Server static IP address is required for easy identification over the network.
+Check the existing Network Configuration:
+ip a #shows the existing network configuration
+​
+Servers network configuration file is stored in /etc/netplan which can be edited to static network setting by removing dhcp configuration
+vmware_eqSBenSS9J.png
+vmware_eqSBenSS9J.png
+This image couldn’t be found.
+www.notion.so (Error 404)
+vmware_eqSBenSS9J.png
+Edit /etc/netplan/50-cloud-init.yaml contains all the host network settings
+Screenshot 2026-08-18 111019.png
+Screenshot 2026-08-18 111019.png
+This image couldn’t be found.
+www.notion.so (Error 404)
+Screenshot 2026-08-18 111019.png
+After editing on /etc/netplan/50-cloud-init.yaml to save changes to the network config file
+Note: the IP configuration has 2 network interfaces (ens33 and ens37). ens33 is the public facing interface useful for accessing remote repositories for installing and updating applications and services from the internet. ens37 the static IP interface is set with network subnet and dns address for name resolution.
+Ensure that the indentation in .yaml is aligned to avoid misconfiguration or repititive error
+check and change the default route depending on the network that is more useful.
+ip route #shows the routing table
+Screenshot 2026-08-18 112400.png
+Screenshot 2026-08-18 112400.png
+This image couldn’t be found.
+www.notion.so (Error 404)
+Screenshot 2026-08-18 112400.png
+Install the DHCP server
+apt install isc-dhcp-server
+​
+Screenshot 2026-08-18 043854(B).png
+Screenshot 2026-08-18 043854(B).png
+This image couldn’t be found.
+www.notion.so (Error 404)
+Screenshot 2026-08-18 043854(B).png
+edit the dhcp server file (/etc/dhcp/dhcpd.conf) to add the dhcp configuration
+At the ../dhcpd.conf file,
+Screenshot 2026-08-18 132618.png
+Screenshot 2026-08-18 132618.png
+This image couldn’t be found.
+www.notion.so (Error 404)
+Screenshot 2026-08-18 132618.png
+default-lease-time 30000 (in seconds) over 8 hours;
+Default lease time refers to how long a device is granted access to a specific IP address by a DHCP server.
+max-lease-time 72000 seconds 20 hours;
+Max lease time is the upper limit set on a DHCP server for how long a device is allowed to keep a specific IP address before renewing it.
+authorative -indicate the official dhcp server
+subnet 192.168.1.0 netmask 255.255.255.0 - defines the network
+range 192.168.1.100 192.168.1.200 - indicates the address available to clients
+option routers 192.168.1.1 - default gateway
+option subnet-mask 255.255.255.0 - shows the class of the network
+option domain-name-servers 8.8.8.8 - identifies the dns server to use
+option broadcast-address 192.168.1.255 - broadcast address
+Validate the network configuration using dhcpd -t. No error shows that configuration was successful
+systemctl enable isc-dhcp-server
+systemctl status isc-dhcp-server
+​
+Enable DHCP through the firewall
+apt install ufw
+ufw enable
+ufw allow 67/udp
+ip route
+Screenshot 2026-08-18 141634.png
+Screenshot 2026-08-18 141634.png
+This image couldn’t be found.
+www.notion.so (Error 404)
+Screenshot 2026-08-18 141634.png
+On the virtual machine host, create a custom Virtual Machine network (Vmnet) for the network interface used for the internal network.
+On Vmware workstation, this can be done by editing vmware setting and select network adapter option to chose a custom specific virtual network.
+Screenshot 2026-08-18 212643.png
+Screenshot 2026-08-18 212643.png
+This image couldn’t be found.
+www.notion.so (Error 404)
+Screenshot 2026-08-18 212643.png
+On the client system, use the same custom virtual network configured for the server on the network interface to recieve dhcp address from the ubuntu server
+Select the same custom virtual network on the client using the same steps highlighted above for client to set up a network route
+For client1
+image.png
+image.png
+This image couldn’t be found.
+www.notion.so (Error 404)
+image.png
+Screenshot 2026-08-18 222612.png
+Screenshot 2026-08-18 222612.png
+This image couldn’t be found.
+www.notion.so (Error 404)
+Screenshot 2026-08-18 222612.png
