@@ -34,7 +34,7 @@ ip a #shows the existing network configuration
 
 Servers network configuration file is stored in /etc/netplan which can be edited to static network setting by removing dhcp configuration
 
-![ip address](/screenshots/ip%20address.png)
+![ip address](screenshots/ip%20address.png)
 
 Edit /etc/netplan/50-cloud-init.yaml contains all the host network settings
 
