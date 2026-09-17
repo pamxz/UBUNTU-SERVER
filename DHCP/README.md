@@ -34,11 +34,11 @@ ip a #shows the existing network configuration
 
 Servers network configuration file is stored in /etc/netplan which can be edited to static network setting by removing dhcp configuration
 
-![vmware_eqSBenSS9J.png](vmware_eqSBenSS9J.png)
+![ip address](/screenshots/ip%20address.png)
 
 Edit /etc/netplan/50-cloud-init.yaml contains all the host network settings
 
-![Screenshot 2026-08-18 111019.png](Screenshot%202026-08-18%20111019.png)
+![netplan config](screenshots/netplan%20config.png)
 
 After editing on /etc/netplan/50-cloud-init.yaml to save changes to the network config file
 
@@ -50,7 +50,7 @@ check and change the default route depending on the network that is more useful.
 ``` jsx
 ip route #shows the routing table
 ```
-![Screenshot 2026-08-18 112400.png](Screenshot%202026-08-18%20112400.png)
+![ip route](screenshots/ip%20route.png)
 
 Install the DHCP server
 
@@ -58,13 +58,13 @@ Install the DHCP server
 apt install isc-dhcp-server
 ```
 
-![Screenshot 2026-08-18 043854(B).png](Screenshot%202026-08-18%20043854(B).png)
+![dhcp server install](screenshots/dhcp%20server%20install.png)
 
 edit the dhcp server file (/etc/dhcp/dhcpd.conf) to add the dhcp configuration
 
 At the ../dhcpd.conf file,
 
-![Screenshot 2026-08-18 132618.png](Screenshot%202026-08-18%20132618.png)
+![dhcpd config](screenshots/dhcpd%20config.png)
 
 default-lease-time 30000 (in seconds) over 8 hours;
 
@@ -106,13 +106,13 @@ ufw allow 67/udp
 
 ip route #to verify ip address changes
 ```
-![Screenshot 2026-08-18 141634.png](Screenshot%202026-08-18%20141634.png)
+![firewall config](screenshots/firewall%20config.png)
 
 On the virtual machine host, create a custom Virtual Machine network (Vmnet) for the network interface used for the internal network. 
 
 On Vmware workstation, this can be done by editing vmware setting and select network adapter option to chose a custom specific virtual network.
 
-![Screenshot 2026-08-18 212643.png](Screenshot%202026-08-18%20212643.png)
+![virtual network](screenshots/custom%20virtual%20network.png)
 
 On the client system, use the same custom virtual network configured for the server on the network interface to recieve dhcp address from the ubuntu server
 
@@ -120,8 +120,8 @@ Select the same custom virtual network on the client using the same steps highli
 
 For client1
 
-![image.png](imageA.png)
+![client 1](screenshots/client1.png)
 
 For client 2
 
-![Screenshot 2026-08-18 222612.png](Screenshot%202026-08-18%20222612.png)
+![client 2](screenshots/client%202.png)
